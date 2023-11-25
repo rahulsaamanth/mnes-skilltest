@@ -1,113 +1,184 @@
-import Image from 'next/image'
+"use client"
 
-export default function Home() {
+import { useEffect, useRef, useState } from "react"
+import { Icon } from "@iconify/react"
+import { useDispatch } from "react-redux"
+import { AppDispatch } from "@/redux/store"
+import { logIn } from "@/redux/features/auth-slice"
+import { useRouter } from "next/navigation"
+
+const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/
+const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/
+
+const LoginPage = () => {
+  const userRef = useRef<HTMLInputElement>(null)
+  const errRef = useRef(null)
+
+  const [user, setUser] = useState("")
+  const [validName, setValidName] = useState(false)
+  const [userFocus, setUserFocus] = useState(false)
+
+  const [pwd, setPwd] = useState("")
+  const [validPwd, setValidPwd] = useState(false)
+  const [pwdFocus, setPwdFocus] = useState(false)
+
+  const [errMsg, setErrMsg] = useState("")
+  const [success, setSuccess] = useState(false)
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    userRef.current?.focus()
+  }, [])
+
+  useEffect(() => {
+    const result = USER_REGEX.test(user)
+
+    setValidName(result)
+  }, [user])
+
+  useEffect(() => {
+    const result = PWD_REGEX.test(pwd)
+
+    setValidPwd(result)
+  }, [pwd])
+
+  useEffect(() => {
+    setErrMsg("")
+  }, [user, pwd])
+
+  const router = useRouter()
+
+  const handleSubmit = (e: { preventDefault: () => void }) => {
+    e.preventDefault()
+
+    const v1 = USER_REGEX.test(user)
+    const v2 = PWD_REGEX.test(pwd)
+    if (!v1 || !v2) {
+      setErrMsg("Invalid Entry")
+      return
+    }
+    dispatch(logIn(user))
+    router.push("/dashboard")
+  }
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
+    <div className="w-full h-screen grid place-content-center bg-white">
+      <section className="text-[1.5rem] py-14 px-10 border border-gray-400 bg-zinc-100 max-w-screen-md">
+        <p
+          ref={errRef}
+          aria-live="assertive"
+          className={`${success ? "text-green-700" : "text-red-700"} font-bold`}
+        >
+          {success ? "User Registered Successfully" : errMsg}
         </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+        <h1 className="font-bold text-[2rem] text-blue-800 mb-8">
+          Login or Register
+          <br />
+        </h1>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+          <label htmlFor="username" className="flex items-center">
+            Username:
+            <span
+              className={`${validName ? "visible" : "hidden"} text-green-700`}
+            >
+              <Icon icon="subway:tick" />
+            </span>
+            <span
+              className={`${
+                validName || !user ? "hidden" : "visible"
+              } text-red-700 font-bold`}
+            >
+              <Icon icon="icomoon-free:cross" />
+            </span>
+          </label>
+          <input
+            type="text"
+            id="username"
+            ref={userRef}
+            autoComplete="off"
+            onChange={(e) => setUser(e.target.value)}
+            value={user}
+            required
+            aria-invalid={validName ? "false" : "true"}
+            aria-describedby="uidnote"
+            onFocus={() => setUserFocus(true)}
+            onBlur={() => setUserFocus(false)}
+            className="outline-none border border-gray-400 pl-2"
+          />
+          <p
+            id="uidnote"
+            className={`${
+              userFocus && user && !validName ? "" : "hidden"
+            } text-[1rem]`}
           >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
+            <Icon icon="akar-icons:info-fill" className="inline-block" />
+            &nbsp; 4 to 24 characters.
+            <br />
+            Must begin with a letter.
+            <br />
+            Letters, numbers, underscores, hyphens allowed.
           </p>
-        </a>
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
+          <label htmlFor="password" className="flex items-center">
+            Password:
+            <span
+              className={`${validPwd ? "visible" : "hidden"} text-green-700`}
+            >
+              <Icon icon="subway:tick" />
             </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
+            <span
+              className={`${
+                validPwd || !pwd ? "hidden" : "visible"
+              } text-red-700`}
+            >
+              <Icon icon="icomoon-free:cross" />
+            </span>
+          </label>
+          <input
+            type="password"
+            id="password"
+            onChange={(e) => setPwd(e.target.value)}
+            value={pwd}
+            required
+            aria-invalid={validPwd ? "false" : "true"}
+            aria-describedby="pwdnote"
+            onFocus={() => setPwdFocus(true)}
+            className="outline-none border border-gray-400 pl-2"
+            onBlur={() => setPwdFocus(false)}
+          />
+          <p
+            id="pwdnote"
+            className={`${
+              pwdFocus && pwd && !validPwd ? "visible" : "hidden"
+            } text-[1rem] max-w-fit`}
+          >
+            <Icon icon="akar-icons:info-fill" className="inline-block" />
+            &nbsp; 8 to 24 characters.
+            <br />
+            Must include uppercase and lowercase letters,
+            <br /> a number and a special character.
+            <br />
+            Allowed special characters:
+            <span aria-label="exclamation mark">!</span>
+            <span aria-label="at symbol">@</span>
+            <span aria-label="hashtag">#</span>
+            <span aria-label="dollar sign">$</span>
+            <span aria-label="percent">%</span>
           </p>
-        </a>
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+          <button
+            disabled={!validName || !validPwd ? true : false}
+            className={`${
+              validName && validPwd ? "bg-black" : " bg-gray-600"
+            } text-white mt-8 btn`}
+          >
+            Sign In
+          </button>
+        </form>
+      </section>
+    </div>
   )
 }
+
+export default LoginPage
