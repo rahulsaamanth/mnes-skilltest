@@ -72,7 +72,7 @@ const HeaderMobile = () => {
                     onClick={() => toggleOpen()}
                     className={`flex w-full text-2xl ${
                       item.path === pathname ? "font-bold" : ""
-                    }`}
+                    } ${item.title === "Logout" && "text-red-600"}`}
                   >
                     {item.title}
                   </Link>

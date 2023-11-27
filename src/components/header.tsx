@@ -8,7 +8,7 @@ import { useRouter, useSelectedLayoutSegment } from "next/navigation"
 import useScroll from "@/hooks/use-scroll"
 import { cn } from "@/lib/utils"
 import { Icon } from "@iconify/react"
-import { useAppSelector } from "@/redux/store"
+import { AppDispatch, useAppSelector } from "@/redux/store"
 import { useDispatch } from "react-redux"
 import { logOut } from "@/redux/features/auth-slice"
 
@@ -16,7 +16,8 @@ const Header = () => {
   const { username, isAuth } = useAppSelector(
     (state) => state.authReducer.value
   )
-  const dispatch = useDispatch()
+
+  const dispatch = useDispatch<AppDispatch>()
   const scrolled = useScroll(5)
   const selectedLayout = useSelectedLayoutSegment()
 
@@ -24,7 +25,7 @@ const Header = () => {
 
   const handleLogout = () => {
     dispatch(logOut())
-    router.push("/")
+    router.replace("/")
   }
 
   return (
@@ -45,7 +46,7 @@ const Header = () => {
         </div>
         {isAuth && (
           <>
-            <div className="text-center flex items-center gap-4">
+            <div className="flex items-center gap-4 w-full justify-center">
               <span>welcome</span>
 
               <span>
@@ -53,16 +54,16 @@ const Header = () => {
               </span>
               <span>{username}</span>
             </div>
-            <div className="hidden md:block">
-              <button
-                onClick={handleLogout}
-                className="h-8 w-auto rounded-md px-2 bg-zinc-300 flex items-center justify-center text-center"
-              >
-                Logout
-              </button>
-            </div>
           </>
         )}
+        <div className="hidden md:block">
+          <button
+            onClick={handleLogout}
+            className="h-8 w-auto rounded-md px-2 bg-zinc-300 flex items-center justify-center text-center"
+          >
+            Logout
+          </button>
+        </div>
       </div>
     </div>
   )

@@ -1,13 +1,22 @@
+"use client"
+
+import { useAppSelector } from "@/redux/store"
 import React from "react"
+import { DataTable } from "../data-table"
+import { columns } from "../columns"
 
 const LaptopsPage = () => {
-  return (
-    <>
-      <span className="font-bold text-4xl">LaptopsPage</span>
+  const products = useAppSelector((state) => state.ProductsReducer.products)
 
-      <div className="border-dashed border border-zinc-500 w-full h-12 rounded-lg"></div>
-      <div className="border-dashed border border-zinc-500 w-full h-64 rounded-lg"></div>
-    </>
+  const laptops = products.filter((product) => product.category === "laptops")
+
+  return (
+    <section className="py-12">
+      <div className="container">
+        <h1 className="mb-6 text-3xl font-bold">All Products</h1>
+        <DataTable columns={columns} data={laptops} />
+      </div>
+    </section>
   )
 }
 

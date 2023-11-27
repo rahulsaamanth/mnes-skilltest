@@ -126,7 +126,7 @@ export default function DashBoardPage() {
     labels,
     datasets: [
       {
-        label: "# of Votes",
+        label: "Stock",
         data: categoryCount,
         backgroundColor: [
           "rgba(255, 99, 132, 0.2)",
@@ -150,7 +150,6 @@ export default function DashBoardPage() {
       },
     ],
   }
-
   useEffect(() => {
     async function requestData() {
       const url = "https://dummyjson.com/products"
@@ -168,16 +167,19 @@ export default function DashBoardPage() {
 
   return (
     <>
-      <span className="font-bold text-4xl">Products Dashboard</span>
-      <div className="flex items-center justify-center flex-col-reverse gap-32 h-screen">
-        <div className="grid place-items-center w-full flex-1">
-          <div className="w-3/4 h-full">
-            <Bar options={options} data={data} />
+      <div className="h-auto">
+        <span className="font-bold text-4xl">Products Dashboard</span>
+        <div className="flex items-center justify-center flex-col h-screen">
+          <div className="grid place-items-center w-full flex-1 h-1/2 py-6">
+            <div className="w-3/4 h-full">
+              {/* Doughnut chart is used for gauge chart  */}
+              <Doughnut options={gaugeOptions} data={gaugeData} />
+            </div>
           </div>
-        </div>
-        <div className="grid place-items-center w-full flex-1">
-          <div className="w-3/4 h-full">
-            <Doughnut options={gaugeOptions} data={gaugeData} />
+          <div className="grid place-items-center w-full flex-1 h-1/2 py-6">
+            <div className="w-3/4 h-full">
+              <Bar options={options} data={data} />
+            </div>
           </div>
         </div>
       </div>

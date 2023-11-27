@@ -1,3 +1,5 @@
+// Layout for all the pages in side home , with sidebar
+import "../styles/globals.css"
 import Header from "@/components/header"
 import HeaderMobile from "@/components/header-mobile"
 import MarginWidthWrapper from "@/components/margin-width-wrapper"
@@ -14,21 +16,19 @@ export default function SidebarLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className={`${inter.className} bg-white`}>
-        <ReduxProvider>
-          <div className="flex">
-            <SideNav />
-            <main className="flex-1">
-              <MarginWidthWrapper>
-                <Header />
-                <HeaderMobile />
-                <PageWrapper>{children}</PageWrapper>
-              </MarginWidthWrapper>
-            </main>
-          </div>
-        </ReduxProvider>
-      </body>
-    </html>
+    <>
+      <ReduxProvider>
+        <div className="flex">
+          <SideNav />
+          <main className="flex-1 h-max">
+            <MarginWidthWrapper>
+              <Header />
+              <HeaderMobile />
+              <PageWrapper>{children}</PageWrapper>
+            </MarginWidthWrapper>
+          </main>
+        </div>
+      </ReduxProvider>
+    </>
   )
 }

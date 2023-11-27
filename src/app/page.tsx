@@ -6,6 +6,8 @@ import { useDispatch } from "react-redux"
 import { AppDispatch } from "@/redux/store"
 import { logIn } from "@/redux/features/auth-slice"
 import { useRouter } from "next/navigation"
+import { ProductsState } from "@/types"
+import { setProducts } from "@/redux/features/products-slice"
 
 const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/
@@ -25,7 +27,7 @@ const LoginPage = () => {
   const [errMsg, setErrMsg] = useState("")
   const [success, setSuccess] = useState(false)
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<AppDispatch>()
 
   useEffect(() => {
     userRef.current?.focus()
@@ -59,12 +61,12 @@ const LoginPage = () => {
       return
     }
     dispatch(logIn(user))
-    router.push("/dashboard")
+    router.replace("/dashboard")
   }
 
   return (
     <div className="w-full h-screen grid place-content-center bg-white">
-      <section className="text-[1.5rem] py-14 px-10 border border-gray-400 bg-zinc-100 max-w-screen-md">
+      <section className="text-[1.5rem] py-14 px-5 sm:px-10 border border-gray-400 bg-zinc-100 max-w-screen-md">
         <p
           ref={errRef}
           aria-live="assertive"

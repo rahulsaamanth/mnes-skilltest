@@ -14,10 +14,9 @@ const SideNav = () => {
     <div className="md:w-60 bg-white h-screen flex-1 fixed border-r border-zinc-200 hidden md:flex">
       <div className="flex flex-col space-y-6 w-full">
         <Link
-          href="/"
+          href="/dashboard"
           className="flex flex-row space-x-3 items-center justify-center md:justify-start md:px-6 border-b border-zinc-200 h-12 w-full"
         >
-          <span className="h-7 w-7 bg-zinc-300 rounded-lg" />
           <span className="font-bold text-xl hidden md:flex">Logo</span>
         </Link>
 
@@ -42,7 +41,9 @@ const MenuItem = ({ item }: { item: SideNavItem }) => {
 
   return (
     <div className="">
-      {item.submenu ? (
+      {item.title === "Logout" ? (
+        <></>
+      ) : item.submenu ? (
         <>
           <button
             onClick={toggleSubMenu}
