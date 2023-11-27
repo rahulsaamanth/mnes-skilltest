@@ -63,6 +63,20 @@ const LoginPage = () => {
     dispatch(logIn(user))
     router.replace("/dashboard")
   }
+  useEffect(() => {
+    async function requestData() {
+      const url = "https://dummyjson.com/products"
+      const response = await fetch(url)
+      const data: ProductsState = await response.json()
+
+      dispatch(setProducts(data))
+    }
+    try {
+      requestData()
+    } catch (error) {
+      console.log(error)
+    }
+  }, [])
 
   return (
     <div className="w-full h-screen grid place-content-center bg-white">

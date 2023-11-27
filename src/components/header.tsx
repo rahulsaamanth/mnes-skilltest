@@ -44,18 +44,18 @@ const Header = () => {
             <span className="font-bold text-xl flex">Logo</span>
           </Link>
         </div>
-        {isAuth && (
-          <>
-            <div className="flex items-center gap-4 w-full justify-center">
-              <span>welcome</span>
 
-              <span>
-                <Icon icon="uil:user" />
-              </span>
-              <span>{username}</span>
-            </div>
-          </>
-        )}
+        <>
+          <div className="flex items-center gap-4 w-full justify-center">
+            <span>welcome</span>
+
+            <span>
+              <Icon icon="uil:user" />
+            </span>
+            <span>{username}</span>
+          </div>
+        </>
+
         <div className="hidden md:block">
           <button
             onClick={handleLogout}
