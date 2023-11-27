@@ -1,13 +1,30 @@
 "use client"
 
-import { useAppSelector } from "@/redux/store"
-import React from "react"
+import { AppDispatch, useAppSelector } from "@/redux/store"
+import React, { useEffect } from "react"
 import { DataTable } from "./data-table"
 import { columns } from "./columns"
+import { ProductsState } from "@/types"
+import { setProducts } from "@/redux/features/products-slice"
+import { useDispatch } from "react-redux"
 
 const Productspage = () => {
   const products = useAppSelector((state) => state.ProductsReducer.products)
-  console.log(products)
+  const dispatch = useDispatch<AppDispatch>()
+  useEffect(() => {
+    async function requestData() {
+      const url = "https://dummyjson.com/products"
+      const response = await fetch(url)
+      const data: ProductsState = await response.json()
+
+      dispatch(setProducts(data))
+    }
+    try {
+      requestData()
+    } catch (error) {
+      console.log(error)
+    }
+  }, [])
 
   return (
     <section className="py-12">

@@ -150,6 +150,20 @@ export default function DashBoardPage() {
       },
     ],
   }
+  useEffect(() => {
+    async function requestData() {
+      const url = "https://dummyjson.com/products"
+      const response = await fetch(url)
+      const data: ProductsState = await response.json()
+
+      dispatch(setProducts(data))
+    }
+    try {
+      requestData()
+    } catch (error) {
+      console.log(error)
+    }
+  }, [])
 
   return (
     <>
