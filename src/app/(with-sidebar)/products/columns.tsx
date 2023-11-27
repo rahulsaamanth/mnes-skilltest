@@ -32,7 +32,7 @@ export const columns: ColumnDef<productTable>[] = [
     header: "Price",
   },
   {
-    accessorKey: "discount",
+    accessorKey: "discountPercentage",
     header: "Discount",
   },
   {
