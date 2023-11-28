@@ -68,7 +68,7 @@ const LoginPage = () => {
     <div className="flex flex-col items-center justify-center h-screen">
       <p className="text-primary text-[1.3rem]  mb-16 w-[400px]">
         <span className=" font-semibold">Note:</span>&nbsp;you may notice some
-        not good practices in the code it's due to production issues, and only
+        not good practices in the code, it's due to production issues and only
         for prototype version.
       </p>
       <div className="w-full grid place-content-center bg-white">
