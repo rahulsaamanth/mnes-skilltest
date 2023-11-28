@@ -34,7 +34,7 @@ const LaptopsPage = () => {
   return (
     <section className="py-12">
       <div className="container">
-        <h1 className="mb-6 text-3xl font-bold">All Products</h1>
+        <h1 className="mb-6 text-3xl font-bold">Laptops</h1>
         <DataTable columns={columns} data={laptops} />
       </div>
     </section>
