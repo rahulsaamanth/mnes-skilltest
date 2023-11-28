@@ -11,6 +11,7 @@ import { useDispatch } from "react-redux"
 const Productspage = () => {
   const products = useAppSelector((state) => state.ProductsReducer.products)
   const dispatch = useDispatch<AppDispatch>()
+  // fetching api multiple time due to production issues
   useEffect(() => {
     async function requestData() {
       const url = "https://dummyjson.com/products"

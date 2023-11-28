@@ -16,6 +16,8 @@ const SmartphonesPage = () => {
   )
 
   const dispatch = useDispatch<AppDispatch>()
+  // fetching api multiple time due to production issues
+
   useEffect(() => {
     async function requestData() {
       const url = "https://dummyjson.com/products"
